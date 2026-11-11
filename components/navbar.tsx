@@ -4,14 +4,11 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Plus, Building2, Search, Briefcase, UserRound, MapPin, Newspaper } from 'lucide-react'
+import { Menu, X, Plus, Building2, Search, Briefcase, UserRound } from 'lucide-react'
 
 const navLinks = [
-  { href: '/categories', label: 'Categories', icon: Building2 },
-  { href: '/cities', label: 'Cities', icon: MapPin },
   { href: '/jobs', label: 'Jobs', icon: Briefcase },
   { href: '/professionals', label: 'Professionals', icon: UserRound },
-  { href: '/blog', label: 'Blog', icon: Newspaper },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ]
