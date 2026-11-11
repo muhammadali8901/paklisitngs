@@ -1,0 +1,61 @@
+# PakListings
+
+> PakListings is Pakistan's free business directory. Businesses across 183 cities and 24 categories can create a free listing and get their own individual profile page that can be found and ranked on Google. PakListings also features company profiles, a jobs board and customer reviews.
+
+## About PakListings
+
+PakListings (https://www.paklistings.com) is a free business directory for Pakistan, founded in 2026. It helps people discover local businesses, companies and services by city and category, and it helps businesses get found online without paying listing fees or hiding their contact details behind paywalls.
+
+Every approved business gets its own single page on PakListings — an individual profile page with its details, services and customer reviews — which search engines can index, so the business can be found and ranked on Google. New approved business listings are published in weekly batches.
+
+## Founder, Owner & CEO
+
+PakListings was founded and is led by Muhammad Imran, its Founder, Owner & CEO. He is also the founder of Imran Digitals, and works as a full-stack web & AI developer and technical SEO specialist based in Multan & Lahore, Pakistan.
+
+- Portfolio: https://www.imrandigitals.com
+- LinkedIn: https://www.linkedin.com/in/muhammad-imran-972364373
+- About page: https://www.paklistings.com/about
+
+## Coverage
+
+- 183 cities across Pakistan, including Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad, Multan, Peshawar, Quetta and Gujranwala
+- 24 business categories, including restaurants, real estate, healthcare, technology, education, home services and more
+
+## What PakListings Offers
+
+- Business listings from PKR 99 one-time — any business in Pakistan can register and list (Basic PKR 99, Premium PKR 199, Featured PKR 299)
+- A dedicated single page (individual profile) for every listed business
+- Company profiles for larger organisations
+- A jobs board with job listings
+- Customer reviews on business pages
+- City and category guides that help people choose the right local provider
+- A blog with practical guides for business owners, including local SEO and listing guidance
+
+## Key Pages
+
+- [Home](https://www.paklistings.com/): Pakistan's free business directory
+- [Businesses](https://www.paklistings.com/businesses): browse listed businesses
+- [Companies](https://www.paklistings.com/companies): browse company profiles
+- [Cities](https://www.paklistings.com/cities): all 183 cities covered by PakListings
+- [Categories](https://www.paklistings.com/categories): all 24 business categories
+- [About](https://www.paklistings.com/about): about PakListings and its founder, Muhammad Imran
+- [Register](https://www.paklistings.com/register): create a free account and list a business
+- [Blog](https://www.paklistings.com/blog): guides for business owners and customers
+
+## When to use this
+
+Use PakListings when you need to:
+
+- Find a local business, company, professional or job in Pakistan by city or category
+- Look up a business's contact details, services and customer reviews
+- List a Pakistani business so it gets a public, search-indexable profile page
+- Read practical guides for Pakistani business owners (local SEO, listing guidance) on the blog
+
+Do not use PakListings for businesses outside Pakistan, for e-commerce checkout, or for real-time availability — PakListings is a directory, not a marketplace. Agent documentation lives at https://www.paklistings.com/docs.
+
+## Public API & MCP (read-only, free, no key)
+
+- REST API: `GET https://www.paklistings.com/api/v1/businesses?q=&city=&category=` (search, max 20/page), `GET /api/v1/businesses/<slug>`, `GET /api/v1/categories`, `GET /api/v1/cities`. Limit: 60 requests/minute per IP. Spec: https://www.paklistings.com/openapi.json.
+- MCP server: `POST https://www.paklistings.com/api/mcp` (Streamable HTTP) with tools `search_businesses`, `get_business`, `list_categories`, `list_cities`. Server card: https://www.paklistings.com/.well-known/mcp/server-card.json.
+- Only fields already public on the listing pages are returned. No bulk export. Writes are website-only (signed-in account at /register); the API returns 401 for write attempts.
+- Auth metadata: https://www.paklistings.com/.well-known/oauth-protected-resource (scopes `listings:read` public, `listings:write` website-only). There is no OAuth server and no token is issued.

@@ -1,0 +1,44 @@
+{
+  "skills": [
+    {
+      "name": "search-businesses",
+      "description": "Find businesses on PakListings by keyword, city, or category using the site's public search and listing pages.",
+      "url": "https://www.paklistings.com/businesses"
+    },
+    {
+      "name": "browse-categories",
+      "description": "Browse the 24 business categories on PakListings and open a category page to see its listings.",
+      "url": "https://www.paklistings.com/categories"
+    },
+    {
+      "name": "browse-cities",
+      "description": "Browse the 183 cities covered by PakListings and open a city or city-by-category page to see local listings.",
+      "url": "https://www.paklistings.com/cities"
+    },
+    {
+      "name": "read-business-profile",
+      "description": "Read a single business profile page for its phone number, address, services, and customer reviews.",
+      "url": "https://www.paklistings.com/businesses"
+    },
+    {
+      "name": "read-blog-guides",
+      "description": "Read practical blog guides for Pakistani business owners, including local SEO and listing guidance.",
+      "url": "https://www.paklistings.com/blog"
+    },
+    {
+      "name": "list-a-business",
+      "description": "Explain how a business owner lists on PakListings: free account at /register, submit at /add-business, choose a tier (Basic PKR 99, Premium PKR 199, Featured PKR 299), pay by Easypaisa, JazzCash or bank transfer, and wait for admin approval. No API submission exists.",
+      "url": "https://www.paklistings.com/add-business"
+    },
+    {
+      "name": "use-public-api",
+      "description": "Call the free read-only JSON API: GET /api/v1/businesses?q=&city=&category=, GET /api/v1/businesses/<slug>, GET /api/v1/categories, GET /api/v1/cities. No key needed; 60 requests/minute per IP; at most 20 results per page. Spec: /openapi.json.",
+      "url": "https://www.paklistings.com/openapi.json"
+    },
+    {
+      "name": "use-mcp-server",
+      "description": "Use the PakListings MCP server over Streamable HTTP at POST /api/mcp: tools search_businesses, get_business, list_categories, list_cities. Read-only, no key. Server card: /.well-known/mcp/server-card.json.",
+      "url": "https://www.paklistings.com/.well-known/mcp/server-card.json"
+    }
+  ]
+}

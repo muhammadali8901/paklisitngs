@@ -1,0 +1,88 @@
+{
+  "resources": [
+    {
+      "description": "Documentation for AI agents and developers: agent surfaces, public API, MCP server, authentication, and example requests.",
+      "displayName": "PakListings agent documentation",
+      "id": "urn:air:paklistings.com:docs",
+      "mediaType": "text/html",
+      "url": "https://www.paklistings.com/docs"
+    },
+    {
+      "description": "Machine-readable overview of the site: what it is, coverage, and key pages.",
+      "displayName": "PakListings llms.txt",
+      "id": "urn:air:paklistings.com:llms-txt",
+      "mediaType": "text/markdown",
+      "url": "https://www.paklistings.com/llms.txt"
+    },
+    {
+      "description": "How agents obtain credentials: none needed for public read-only content or the public API; website sign-up for listing owners.",
+      "displayName": "PakListings authentication guide",
+      "id": "urn:air:paklistings.com:auth",
+      "mediaType": "text/markdown",
+      "url": "https://www.paklistings.com/auth.md"
+    },
+    {
+      "description": "Listing tiers in plain markdown: Basic PKR 99, Premium PKR 199, Featured PKR 299, one-time. The read-only API is free with no key.",
+      "displayName": "PakListings pricing",
+      "id": "urn:air:paklistings.com:pricing",
+      "mediaType": "text/markdown",
+      "url": "https://www.paklistings.com/pricing.md"
+    },
+    {
+      "description": "Markdown twin of the homepage: what the site is, coverage, and how to find or list a business.",
+      "displayName": "PakListings homepage in markdown",
+      "id": "urn:air:paklistings.com:index-md",
+      "mediaType": "text/markdown",
+      "url": "https://www.paklistings.com/index.md"
+    },
+    {
+      "description": "Read-only JSON API: search businesses, read one business, list categories and cities. Free, no key, 60 requests/minute per IP. Documented in OpenAPI at /openapi.json.",
+      "displayName": "PakListings public API",
+      "id": "urn:air:paklistings.com:api",
+      "mediaType": "application/json",
+      "url": "https://www.paklistings.com/api/v1/businesses"
+    },
+    {
+      "description": "OpenAPI 3.1 document for the public read-only API: operations, parameters, and response schemas.",
+      "displayName": "PakListings OpenAPI document",
+      "id": "urn:air:paklistings.com:openapi",
+      "mediaType": "application/json",
+      "url": "https://www.paklistings.com/openapi.json"
+    },
+    {
+      "description": "Streamable HTTP MCP server (POST /api/mcp) with read-only tools: search_businesses, get_business, list_categories, list_cities. Server card at /.well-known/mcp/server-card.json.",
+      "displayName": "PakListings MCP server",
+      "id": "urn:air:paklistings.com:mcp",
+      "mediaType": "application/json",
+      "url": "https://www.paklistings.com/api/mcp"
+    },
+    {
+      "description": "MCP server card: display name, description, endpoint, and tool list.",
+      "displayName": "PakListings MCP server card",
+      "id": "urn:air:paklistings.com:mcp-server-card",
+      "mediaType": "application/json",
+      "url": "https://www.paklistings.com/.well-known/mcp/server-card.json"
+    },
+    {
+      "description": "RFC 9728 metadata: scopes listings:read (public) and listings:write (website-only); no authorization server, no bearer tokens issued.",
+      "displayName": "PakListings OAuth protected-resource metadata",
+      "id": "urn:air:paklistings.com:oauth-protected-resource",
+      "mediaType": "application/json",
+      "url": "https://www.paklistings.com/.well-known/oauth-protected-resource"
+    },
+    {
+      "description": "RFC 8414 metadata stating honestly that PakListings has no OAuth authorization server: Firebase email/password website sign-in only, no token endpoint.",
+      "displayName": "PakListings OAuth authorization-server metadata",
+      "id": "urn:air:paklistings.com:oauth-authorization-server",
+      "mediaType": "application/json",
+      "url": "https://www.paklistings.com/.well-known/oauth-authorization-server"
+    },
+    {
+      "description": "XML sitemap of the site's indexable public pages.",
+      "displayName": "PakListings sitemap",
+      "id": "urn:air:paklistings.com:sitemap",
+      "mediaType": "application/xml",
+      "url": "https://www.paklistings.com/sitemap.xml"
+    }
+  ]
+}

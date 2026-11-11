@@ -1,0 +1,44 @@
+{
+  "authentication": "none",
+  "contact": {
+    "email": "support@paklistings.com",
+    "url": "https://www.paklistings.com/contact"
+  },
+  "description": "Read-only MCP server for PakListings, the Pakistan business directory (183 cities, 24 categories). Search public businesses, read one business, list categories and cities. Free, no API key, 60 requests/minute per IP. Only fields already public on the listing pages are returned.",
+  "displayName": "PakListings MCP Server",
+  "documentation": "https://www.paklistings.com/docs",
+  "icon": "https://www.paklistings.com/logo.png",
+  "logo": "https://www.paklistings.com/logo.png",
+  "name": "paklistings-mcp",
+  "protocolVersion": "2025-06-18",
+  "rateLimit": "60 requests per minute per IP",
+  "scopes": [
+    "listings:read"
+  ],
+  "tools": [
+    {
+      "description": "Search public PakListings businesses by keyword, city, or category. At most 20 results per call.",
+      "name": "search_businesses",
+      "title": "Search businesses"
+    },
+    {
+      "description": "Read a single approved public business by its slug.",
+      "name": "get_business",
+      "title": "Read one business"
+    },
+    {
+      "description": "List the 24 business categories covered by PakListings.",
+      "name": "list_categories",
+      "title": "List categories"
+    },
+    {
+      "description": "List the 183 cities covered by PakListings.",
+      "name": "list_cities",
+      "title": "List cities"
+    }
+  ],
+  "transport": "streamable-http",
+  "url": "https://www.paklistings.com/api/mcp",
+  "version": "1.0.0",
+  "website": "https://www.paklistings.com/docs"
+}

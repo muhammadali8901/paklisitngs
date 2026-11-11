@@ -1,0 +1,70 @@
+{
+  "name": "PakListings",
+  "description": "PakListings is Pakistan's business directory: find local businesses, companies, professionals and jobs across 183 cities and 24 categories, or list a business from PKR 99, one-time. Public content is readable without credentials via the public pages, the free read-only JSON API (/api/v1/businesses, documented at /openapi.json), and the MCP server (POST /api/mcp).",
+  "url": "https://www.paklistings.com/",
+  "version": "1.0.0",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "defaultInputModes": [
+    "text"
+  ],
+  "defaultOutputModes": [
+    "text"
+  ],
+  "skills": [
+    {
+      "id": "search-businesses",
+      "name": "Search businesses",
+      "description": "Find businesses on PakListings by keyword, city, or category.",
+      "tags": [
+        "directory",
+        "pakistan",
+        "business",
+        "local-search"
+      ]
+    },
+    {
+      "id": "browse-cities-categories",
+      "name": "Browse cities and categories",
+      "description": "Browse the 183 cities and 24 categories covered by PakListings.",
+      "tags": [
+        "directory",
+        "pakistan",
+        "cities",
+        "categories"
+      ]
+    },
+    {
+      "id": "read-blog-guides",
+      "name": "Read blog guides",
+      "description": "Read practical guides for Pakistani business owners on the PakListings blog.",
+      "tags": [
+        "guides",
+        "local-seo",
+        "pakistan"
+      ]
+    },
+    {
+      "id": "use-public-api",
+      "name": "Use the public read-only API",
+      "description": "Search businesses and read categories/cities as JSON from /api/v1/* \u2014 free, no key, 60 requests/minute per IP. Documented in /openapi.json.",
+      "tags": [
+        "api",
+        "json",
+        "directory",
+        "pakistan"
+      ]
+    }
+  ],
+  "provider": {
+    "organization": "Imran Digitals",
+    "url": "https://www.imrandigitals.com"
+  },
+  "contact": {
+    "email": "support@paklistings.com",
+    "url": "https://www.paklistings.com/contact"
+  }
+}

@@ -1,0 +1,293 @@
+rules_version = '2';
+
+// ============================================================
+// PakListings — Firestore Security Rules
+// Firebase Console > Firestore Database > Rules mein paste karein
+// ============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- Helpers ----------
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isOwner(ownerId) {
+      return isSignedIn() && request.auth.uid == ownerId;
+    }
+
+    // ---------- Users (profiles) ----------
+    // Har user sirf apna profile parh/sakta aur bana/update kar sakta hai.
+    // Admin sab profiles dekh sakta hai.
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      // Signup par role hamesha 'member' — koi khud ko admin nahi bana sakta.
+      allow create: if isOwner(userId)
+        && request.resource.data.email is string
+        && request.resource.data.phone is string
+        && request.resource.data.phone.matches('^(\\+92|0)3[0-9]{9}$')
+        && request.resource.data.role == 'member';
+      // Owner apna profile update kar sakta hai lekin role nahi badal sakta; role sirf admin badlega.
+      allow update: if isAdmin()
+        || (isOwner(userId) && request.resource.data.role == resource.data.role);
+      allow delete: if isAdmin();
+    }
+
+    // ---------- Businesses ----------
+    // Public sirf APPROVED listings dekh sakta hai.
+    // Owner apni saari listings (pending sameet) dekh sakta hai.
+    // Nayi listing hamesha status = 'pending' se banti hai; approve sirf admin karega.
+    match /businesses/{businessId} {
+      allow read: if resource.data.status == 'approved'
+        || isOwner(resource.data.ownerId)
+        || isAdmin();
+      allow create: if isSignedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.phone is string
+        && request.resource.data.phone.matches('^(\\+92|0)3[0-9]{9}$');
+      // Owner status/featured/verified nahi badal sakta — yeh sirf admin karega.
+      // Tier/payment/edit fields bhi owner nahi badal sakta: tier, paymentStatus,
+      // pendingEdit aur editEffectiveAt sirf admin ke through badalte hain (payment
+      // approval ya edit-request approval se). Projects array owner update kar sakta hai.
+      allow update: if isAdmin()
+        || (isOwner(resource.data.ownerId)
+            && request.resource.data.ownerId == resource.data.ownerId
+            && request.resource.data.status == resource.data.status
+            && request.resource.data.get('featured', false) == resource.data.get('featured', false)
+            && request.resource.data.get('verified', false) == resource.data.get('verified', false)
+            && request.resource.data.get('tier', resource.data.get('tier', null)) == resource.data.get('tier', null)
+            && request.resource.data.get('paymentStatus', resource.data.get('paymentStatus', null)) == resource.data.get('paymentStatus', null)
+            && request.resource.data.get('pendingEdit', resource.data.get('pendingEdit', null)) == resource.data.get('pendingEdit', null)
+            && request.resource.data.get('editEffectiveAt', resource.data.get('editEffectiveAt', null)) == resource.data.get('editEffectiveAt', null));
+      allow delete: if isOwner(resource.data.ownerId) || isAdmin();
+
+      // Owner-private contact (Round 3): businesses/{id}/private/contact
+      // mein owner ka login email hota hai. Sirf owner (parent doc ke
+      // ownerId se match karke) ya admin parh/likh sakta hai — public
+      // kabhi nahi, aur listing queries is subcollection ko nahi chhoo sakti.
+      match /private/{docId} {
+        allow read, write: if isAdmin()
+          || (isSignedIn()
+              && request.auth.uid == get(/databases/$(database)/documents/businesses/$(businessId)).data.ownerId);
+      }
+    }
+
+    // ---------- Companies ----------
+    match /companies/{companyId} {
+      allow read: if resource.data.status == 'approved'
+        || isOwner(resource.data.ownerId)
+        || isAdmin();
+      allow create: if isSignedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.phone is string
+        && request.resource.data.phone.matches('^(\\+92|0)3[0-9]{9}$');
+      allow update: if isAdmin()
+        || (isOwner(resource.data.ownerId)
+            && request.resource.data.ownerId == resource.data.ownerId
+            && request.resource.data.status == resource.data.status
+            && request.resource.data.get('featured', false) == resource.data.get('featured', false)
+            && request.resource.data.get('verified', false) == resource.data.get('verified', false)
+            && request.resource.data.get('tier', resource.data.get('tier', null)) == resource.data.get('tier', null)
+            && request.resource.data.get('paymentStatus', resource.data.get('paymentStatus', null)) == resource.data.get('paymentStatus', null)
+            && request.resource.data.get('pendingEdit', resource.data.get('pendingEdit', null)) == resource.data.get('pendingEdit', null)
+            && request.resource.data.get('editEffectiveAt', resource.data.get('editEffectiveAt', null)) == resource.data.get('editEffectiveAt', null));
+      allow delete: if isOwner(resource.data.ownerId) || isAdmin();
+
+      // Owner-private contact (Round 3): companies/{id}/private/contact —
+      // sirf owner (parent doc ke ownerId se match) ya admin.
+      match /private/{docId} {
+        allow read, write: if isAdmin()
+          || (isSignedIn()
+              && request.auth.uid == get(/databases/$(database)/documents/companies/$(companyId)).data.ownerId);
+      }
+    }
+
+    // ---------- Jobs ----------
+    match /jobs/{jobId} {
+      allow read: if resource.data.status == 'approved'
+        || isOwner(resource.data.ownerId)
+        || isAdmin();
+      allow create: if isSignedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.status == 'pending';
+      allow update: if isAdmin()
+        || (isOwner(resource.data.ownerId)
+            && request.resource.data.ownerId == resource.data.ownerId
+            && request.resource.data.status == resource.data.status
+            && request.resource.data.get('tier', resource.data.get('tier', null)) == resource.data.get('tier', null)
+            && request.resource.data.get('paymentStatus', resource.data.get('paymentStatus', null)) == resource.data.get('paymentStatus', null)
+            && request.resource.data.get('pendingEdit', resource.data.get('pendingEdit', null)) == resource.data.get('pendingEdit', null)
+            && request.resource.data.get('editEffectiveAt', resource.data.get('editEffectiveAt', null)) == resource.data.get('editEffectiveAt', null));
+      allow delete: if isOwner(resource.data.ownerId) || isAdmin();
+
+      // Owner-private contact (Round 3): jobs/{id}/private/contact —
+      // sirf owner (parent doc ke ownerId se match) ya admin.
+      match /private/{docId} {
+        allow read, write: if isAdmin()
+          || (isSignedIn()
+              && request.auth.uid == get(/databases/$(database)/documents/jobs/$(jobId)).data.ownerId);
+      }
+    }
+
+    // ---------- Professional Profiles ----------
+    // Public sirf APPROVED profiles parh sakta hai; owner apni profile
+    // dekh sakta hai; admin sab kuch. Phone LAZMI hai (Pakistani mobile,
+    // wahi pattern jo businesses/companies par hai) — profile par public
+    // phone number dikhta hai, is liye create par hi format check hota hai.
+    match /professionals/{professionalId} {
+      allow read: if resource.data.status == 'approved'
+        || isOwner(resource.data.ownerId)
+        || isAdmin();
+      allow create: if isSignedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.phone is string
+        && request.resource.data.phone.matches('^(\\\\+92|0)3[0-9]{9}$');
+      allow update: if isAdmin()
+        || (isOwner(resource.data.ownerId)
+            && request.resource.data.ownerId == resource.data.ownerId
+            && request.resource.data.status == resource.data.status
+            && request.resource.data.get('tier', resource.data.get('tier', null)) == resource.data.get('tier', null)
+            && request.resource.data.get('paymentStatus', resource.data.get('paymentStatus', null)) == resource.data.get('paymentStatus', null)
+            && request.resource.data.get('pendingEdit', resource.data.get('pendingEdit', null)) == resource.data.get('pendingEdit', null)
+            && request.resource.data.get('editEffectiveAt', resource.data.get('editEffectiveAt', null)) == resource.data.get('editEffectiveAt', null));
+      allow delete: if isOwner(resource.data.ownerId) || isAdmin();
+
+      // Owner-private contact (Round 3): professionals/{id}/private/contact —
+      // sirf owner (parent doc ke ownerId se match) ya admin.
+      match /private/{docId} {
+        allow read, write: if isAdmin()
+          || (isSignedIn()
+              && request.auth.uid == get(/databases/$(database)/documents/professionals/$(professionalId)).data.ownerId);
+      }
+    }
+
+    // ---------- Reviews (business reviews) ----------
+    // Koi bhi review submit kar sakta hai — hamesha status = 'pending' se banta hai.
+    // Naam (authorName, 3–80 chars) har review par LAZMI hai — beghair naam review nahi banta.
+    // Public sirf APPROVED reviews parh sakta hai; approve/reject sirf admin karega.
+    match /reviews/{reviewId} {
+      allow read: if resource.data.status == 'approved' || isAdmin();
+      allow create: if request.resource.data.status == 'pending'
+        && request.resource.data.businessId is string
+        && request.resource.data.authorName is string
+        && request.resource.data.authorName.size() >= 3
+        && request.resource.data.authorName.size() <= 80
+        && request.resource.data.rating is number
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5;
+      allow update, delete: if isAdmin();
+    }
+
+    // ---------- Payment Proofs (Featured/Verified upgrades) ----------
+    // Owner apni listing ke liye payment proof (screenshot) submit karta hai — status 'pending'.
+    // Admin proof check karke approve/reject karta hai; approve par listing featured/verified hoti hai.
+    match /payment_proofs/{proofId} {
+      allow read: if isOwner(resource.data.ownerId) || isAdmin();
+      allow create: if isSignedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.proofUrl is string;
+      allow update, delete: if isAdmin();
+    }
+
+    // ---------- Job Applications ----------
+    // Signed-in user apply kar sakta hai; application sirf applicant aur admin dekh sakte hain.
+    match /job_applications/{applicationId} {
+      allow create: if isSignedIn()
+        && request.resource.data.applicantId == request.auth.uid;
+      allow read, update: if isOwner(resource.data.applicantId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ---------- Contact Messages ----------
+    // Koi bhi (bina login) message bhej sakta hai; parhna sirf admin ka kaam hai.
+    match /contact_messages/{messageId} {
+      allow create: if request.resource.data.name is string
+        && request.resource.data.email is string
+        && request.resource.data.message is string;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ---------- Mail Queue (Firebase "Trigger Email" extension ke liye) ----------
+    // Admin kisi bhi action (approve/reject/delete waghera) par email queue kar sakta hai.
+    // Signed-in user bhi queue kar sakta hai — LEKIN sirf (1) apni khud ki login
+    // email par, ya (2) admin ki notification email (admin@paklistings.com) par;
+    // aur document mein sirf to + message ho sakta hai, message mein sirf
+    // subject/text/html strings, size ki sakht had ke saath. Is se koi user
+    // kisi teesre bande ko email/spam nahi bhej sakta.
+    // Parhna/update/delete sirf admin.
+    match /mail/{mailId} {
+      allow create: if (isAdmin()
+          && request.resource.data.to is string)
+        || (isSignedIn()
+          && request.resource.data.keys().hasAll(['to', 'message'])
+          && request.resource.data.keys().hasOnly(['to', 'message'])
+          && request.resource.data.to is string
+          && (request.resource.data.to == request.auth.token.email
+              || request.resource.data.to == 'admin@paklistings.com')
+          && request.resource.data.message is map
+          && request.resource.data.message.keys().hasAll(['subject', 'text', 'html'])
+          && request.resource.data.message.keys().hasOnly(['subject', 'text', 'html'])
+          && request.resource.data.message.subject is string
+          && request.resource.data.message.subject.size() <= 200
+          && request.resource.data.message.text is string
+          && request.resource.data.message.text.size() <= 5000
+          && request.resource.data.message.html is string
+          && request.resource.data.message.html.size() <= 20000);
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ---------- Edit Requests (Premium / Featured owners) ----------
+    // Owner apni listing ke liye edit request bana sakta hai — hamesha status = 'pending' se.
+    // Admin approve/reject karta hai; approve par changes listing ke pendingEdit mein jaate hain
+    // aur agle weekly release par live hote hain.
+    match /edit_requests/{requestId} {
+      allow create: if isSignedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.listingId is string
+        && request.resource.data.changes is map;
+      allow read: if isOwner(resource.data.ownerId) || isAdmin();
+      allow update, delete: if isAdmin();
+    }
+
+    // ---------- User Blog Posts (Featured listings, max 2) ----------
+    // Owner apna post bana sakta hai — hamesha status = 'pending' se.
+    // Public sirf APPROVED posts parh sakta hai; owner apne posts dekh sakta hai;
+    // approve/reject sirf admin karega.
+    match /blog_posts/{postId} {
+      allow create: if isSignedIn()
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.title is string
+        && request.resource.data.content is string;
+      allow read: if resource.data.status == 'approved' || isOwner(resource.data.authorId) || isAdmin();
+      allow update, delete: if isAdmin();
+    }
+
+    // ---------- Site Settings (Admin → Settings / site-protection guard) ----------
+    // The protection guard reads settings/site and Admin → Settings writes
+    // it — without this rule the catch-all below denies both, so the
+    // guard's OFF switch could never work. Public read only; writes are
+    // admin-only, exactly like the other admin-managed collections.
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ---------- Baaki sab collections: band ----------
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

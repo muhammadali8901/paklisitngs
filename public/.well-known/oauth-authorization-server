@@ -1,0 +1,15 @@
+{
+  "authorization_endpoint": null,
+  "code_challenge_methods_supported": [],
+  "grant_types_supported": [],
+  "issuer": "https://www.paklistings.com",
+  "note": "PakListings has no OAuth authorization server. Authentication is Firebase-based email/password with email verification, handled entirely in a signed-in website session (sign up at https://www.paklistings.com/register, sign in at https://www.paklistings.com/login). There is no third-party client registration, no authorization endpoint, no token endpoint, and no bearer token is ever issued \u2014 the null endpoints above are deliberate, not missing values. Public reads (scope listings:read) need no credential at all. Listing writes (scope listings:write) happen only from the website account, never through an API token. See https://www.paklistings.com/auth.md and https://www.paklistings.com/.well-known/oauth-protected-resource.",
+  "registration_endpoint": null,
+  "response_types_supported": [],
+  "scopes_supported": [
+    "listings:read",
+    "listings:write"
+  ],
+  "service_documentation": "https://www.paklistings.com/docs",
+  "token_endpoint": null
+}

@@ -1,0 +1,63 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://www.paklistings.com/",
+      "item": [
+        {
+          "href": "https://www.paklistings.com/docs",
+          "type": "text/html",
+          "rel": "help",
+          "title": "PakListings agent documentation"
+        },
+        {
+          "href": "https://www.paklistings.com/llms.txt",
+          "type": "text/markdown",
+          "rel": "describedby",
+          "title": "PakListings llms.txt"
+        },
+        {
+          "href": "https://www.paklistings.com/auth.md",
+          "type": "text/markdown",
+          "rel": "describedby",
+          "title": "PakListings authentication guide"
+        },
+        {
+          "href": "https://www.paklistings.com/pricing.md",
+          "type": "text/markdown",
+          "rel": "describedby",
+          "title": "PakListings pricing"
+        },
+        {
+          "href": "https://www.paklistings.com/sitemap.xml",
+          "type": "application/xml",
+          "rel": "sitemap",
+          "title": "PakListings sitemap"
+        },
+        {
+          "href": "https://www.paklistings.com/api/v1/businesses",
+          "type": "application/json",
+          "rel": "service",
+          "title": "PakListings public API \u2014 search businesses (read-only, free, no key)"
+        },
+        {
+          "href": "https://www.paklistings.com/openapi.json",
+          "type": "application/json",
+          "rel": "describedby",
+          "title": "PakListings OpenAPI 3.1 document"
+        },
+        {
+          "href": "https://www.paklistings.com/api/mcp",
+          "type": "application/json",
+          "rel": "service",
+          "title": "PakListings MCP server (Streamable HTTP, read-only tools)"
+        },
+        {
+          "href": "https://www.paklistings.com/.well-known/oauth-protected-resource",
+          "type": "application/json",
+          "rel": "describedby",
+          "title": "PakListings OAuth protected-resource metadata (RFC 9728)"
+        }
+      ]
+    }
+  ]
+}

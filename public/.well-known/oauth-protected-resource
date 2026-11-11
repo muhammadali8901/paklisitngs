@@ -1,0 +1,13 @@
+{
+  "authorization_servers": [],
+  "bearer_methods_supported": [
+    "header"
+  ],
+  "note": "RFC 9728 protected-resource metadata for PakListings. Public reads (listings:read) \u2014 the read-only API at /api/v1/* and the MCP server at /api/mcp \u2014 need no credential: no API key, no token, no OAuth. There is no authorization server (authorization_servers is empty on purpose; see /.well-known/oauth-authorization-server), because PakListings issues no bearer tokens. Listing writes (listings:write) are website-only: a listing owner signs in with email/password on the website and submits from /add-business. A write attempt against the API returns 401 with a WWW-Authenticate Bearer hint pointing at this document.",
+  "resource": "https://www.paklistings.com",
+  "resource_documentation": "https://www.paklistings.com/docs",
+  "scopes_supported": [
+    "listings:read",
+    "listings:write"
+  ]
+}
